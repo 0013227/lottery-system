@@ -1,0 +1,74 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+  <title>抽签系统</title>  
+  <style>  
+    body {  
+      text-align: center;  
+      font-family: Arial, sans-serif;  
+    }  
+    #result {  
+      font-size: 48px;  
+      margin-top: 20px;  
+    }  
+    #history {  
+      font-size: 24px;  
+      margin-top: 20px;  
+    }  
+    #start-btn, #stop-btn {  
+      padding: 10px 20px;  
+      font-size: 24px;  
+      margin-top: 20px;  
+    }  
+    #range-input {  
+      width: 200px;  
+      padding: 5px;  
+      font-size: 20px;  
+      margin-top: 20px;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <h1>抽签系统</h1>  
+  <label for="range-input">请输入抽签数字范围：</label>  
+  <input type="text" id="range-input" placeholder="例如：1-100">  
+  <button id="start-btn">开始</button>  
+  <button id="stop-btn">停止</button>  
+  <div id="result"></div>  
+  <div id="history"></div>  
+  
+  <script>  
+    var startBtn = document.getElementById("start-btn");  
+    var stopBtn = document.getElementById("stop-btn");  
+    var resultDiv = document.getElementById("result");  
+    var historyDiv = document.getElementById("history");  
+    var rangeInput = document.getElementById("range-input");  
+    var randomNum = Math.floor(Math.random() * 100); // 生成一个0-99的随机数  
+    var intervalId; // 用于存储定时器的ID，方便后续停止定时器  
+    var history = []; // 用于存储抽签结果的数组  
+  
+    startBtn.addEventListener("click", function() {  
+      resultDiv.innerText = ""; // 清空结果显示区域  
+      historyDiv.innerText = ""; // 清空历史记录区域  
+      startBtn.disabled = true; // 开始按钮置灰，不可点击  
+      stopBtn.disabled = false; // 停止按钮可点击  
+      rangeInput.disabled = true; // 数字范围输入框置灰，不可修改  
+      intervalId = setInterval(function() { // 每秒更新一次结果显示区域的数字，并将其添加到历史记录中  
+        randomNum = Math.floor(Math.random() * (rangeInput.value ? rangeInput.value.split("-").pop() : 100));  
+        resultDiv.innerText = randomNum;  
+        history.push(randomNum); // 将当前随机数添加到历史记录数组中  
+        historyDiv.innerText = history.join(", "); // 将历史记录数组转换为字符串并显示在历史记录区域中  
+        console.log("Updated random number:", randomNum); // 调试输出，查看是否成功更新了随机数  
+      }, 1);  
+    });  
+  
+    stopBtn.addEventListener("click", function() {  
+      console.log("Stopping timer..."); // 调试输出，查看是否执行了停止操作  
+      clearInterval(intervalId); // 停止更新结果显示区域的数字和历史记录区域的内容  
+      startBtn.disabled = false; // 开始按钮可点击  
+      stopBtn.disabled = true; // 停止按钮置灰，不可点击  
+      rangeInput.disabled = false; // 数字范围输入框可修改  
+    });  
+  </script>  
+</body>  
+</html>
